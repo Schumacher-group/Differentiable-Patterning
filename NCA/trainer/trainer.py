@@ -82,11 +82,31 @@ class NcaTrainer:
 		self.loss_time_channel_mask = context.loss_time_channel_mask
 		# Set up data and data augmenter class
 		self._data_raw = data
+		##augmenter_kwargs = dict(
+		##	data_true=data,
+		##	hidden_channels=0 if channel_schema is not None else self.channels-self.data_channels,
+		##	nca_model=self.model,
+		##	)
+
 		augmenter_kwargs = dict(
 			data_true=data,
-			hidden_channels=0 if channel_schema is not None else self.channels-self.data_channels,
-			nca_model=self.model,
+			hidden_channels=(
+				0 if channel_schema is not None
+				else self.channels - self.data_channels
+			),
+		)
+
+		signature = inspect.signature(data_augmenter.__init__)
+
+		if (
+			"nca_model" in signature.parameters
+			or any(
+				p.kind == inspect.Parameter.VAR_KEYWORD
+				for p in signature.parameters.values()
 			)
+		):
+			augmenter_kwargs["nca_model"] = self.model
+
 		self.data_augmenter = data_augmenter(**augmenter_kwargs)
 		self.data_augmenter.data_init(self.sharding)
 		self.data = self.data_augmenter.return_saved_data()
