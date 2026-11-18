@@ -27,15 +27,15 @@ grid:
   data.micropattern.cleaning.horizontal_stripe_widths:
     - {cell_fate_s1/TBXT: 10, cell_fate_s2/TBXT: 10}
   data.micropattern.cleaning.stripe_block: [270]
-  data.downsample: [32]
-  run.t: [64]
+  data.downsample: [16]
+  run.t: [128]
   data.batches: [2]
 
   # Baseline (control) colonies only
   data.knockout.curriculum: [null]
 
   # Training
-  run.iterations: [4000]
+  run.iterations: [16000]
   run.write_videos: [false]
   optimiser.learn_rate: [1e-4]
   optimiser.type: [nadam]
