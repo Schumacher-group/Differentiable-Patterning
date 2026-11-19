@@ -7,7 +7,6 @@ count: 2
 configs:
 - index: 0
   overrides:
-    initialization.model_id: 20261118T165732Z-cfgac37ad4d6c6a-cc68877f
     logging.wandb.project: nca_tutorial
     labels.gpu: H200
     system.precision: bfloat16
@@ -39,10 +38,19 @@ configs:
     loss.terms.0.multi_target_weights.correlation: 0.0
     loss.terms.0.multi_target_weights.radial: 1.0
     loss.terms.0.random_channel_shuffle: true
+    data.micropattern.train_replicates:
+    - 1
+    - 2
+    data.micropattern.validation_replicates:
+    - 3
+    - 4
+    initialization.model_id: 20261118T165732Z-cfgac37ad4d6c6a-cc68877f
     experiment.name: tutorial_finetune_ko_v1
     logging.wandb.group: tutorial_finetune_ko_v1
     seed: 0
     logging.wandb.tag_keys:
+    - data.micropattern.train_replicates
+    - data.micropattern.validation_replicates
     - initialization.model_id
   config:
     schema_version: 10
@@ -61,8 +69,12 @@ configs:
       downsample: 16
       micropattern:
         pool_copies: 1
-        train_replicates: null
-        validation_replicates: null
+        train_replicates:
+        - 1
+        - 2
+        validation_replicates:
+        - 3
+        - 4
         experiment_groups: null
         excluded_measurements:
         - cell_fate_s2/SOX17
@@ -221,6 +233,8 @@ configs:
         group: tutorial_finetune_ko_v1
         tags: null
         tag_keys:
+        - data.micropattern.train_replicates
+        - data.micropattern.validation_replicates
         - initialization.model_id
     model_store:
       enabled: true
@@ -231,7 +245,6 @@ configs:
       model_id: 20261118T165732Z-cfgac37ad4d6c6a-cc68877f
 - index: 1
   overrides:
-    initialization.model_id: 20261118T165733Z-cfg540ddd0849db-8c5a46fc
     logging.wandb.project: nca_tutorial
     labels.gpu: H200
     system.precision: bfloat16
@@ -263,10 +276,19 @@ configs:
     loss.terms.0.multi_target_weights.correlation: 0.0
     loss.terms.0.multi_target_weights.radial: 1.0
     loss.terms.0.random_channel_shuffle: true
+    data.micropattern.train_replicates:
+    - 3
+    - 4
+    data.micropattern.validation_replicates:
+    - 1
+    - 2
+    initialization.model_id: 20261118T165733Z-cfg540ddd0849db-8c5a46fc
     experiment.name: tutorial_finetune_ko_v1
     logging.wandb.group: tutorial_finetune_ko_v1
     seed: 1
     logging.wandb.tag_keys:
+    - data.micropattern.train_replicates
+    - data.micropattern.validation_replicates
     - initialization.model_id
   config:
     schema_version: 10
@@ -285,8 +307,12 @@ configs:
       downsample: 16
       micropattern:
         pool_copies: 1
-        train_replicates: null
-        validation_replicates: null
+        train_replicates:
+        - 3
+        - 4
+        validation_replicates:
+        - 1
+        - 2
         experiment_groups: null
         excluded_measurements:
         - cell_fate_s2/SOX17
@@ -445,6 +471,8 @@ configs:
         group: tutorial_finetune_ko_v1
         tags: null
         tag_keys:
+        - data.micropattern.train_replicates
+        - data.micropattern.validation_replicates
         - initialization.model_id
     model_store:
       enabled: true
