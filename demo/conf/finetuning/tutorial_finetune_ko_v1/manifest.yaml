@@ -1,7 +1,7 @@
 experiment_name: tutorial_finetune_ko_v1
 entrypoint: Experiments.micropatterns.train:run
 base_config: /Users/linus/Library/CloudStorage/Dropbox/projects/cellStates/patternFormation/AlexMacMigs/Differentiable-Patterning/Experiments/micropatterns/conf/base_config.yaml
-sweep_file: /Users/linus/Library/CloudStorage/Dropbox/projects/cellStates/patternFormation/AlexMacMigs/Differentiable-Patterning/demo/conf/finetuning/finetune_template_v1.yaml
+sweep_file: /Users/linus/Library/CloudStorage/Dropbox/projects/cellStates/patternFormation/AlexMacMigs/Differentiable-Patterning/demo/conf/finetuning/tutorial_finetune_ko_sweep_v1.yaml
 output_dir: demo/conf/finetuning/tutorial_finetune_ko_v1
 count: 2
 configs:
@@ -16,13 +16,6 @@ configs:
     - baseline
     - ko_0h
     - ko_24h
-    data.micropattern.projection: sum
-    data.micropattern.cleaning.horizontal_stripe_widths:
-      cell_fate_s1/TBXT: 10
-      cell_fate_s2/TBXT: 10
-    data.micropattern.cleaning.stripe_block: 270
-    data.downsample: 16
-    run.t: 128
     run.iterations: 2000
     run.write_videos: false
     optimiser.learn_rate: 0.0001
@@ -38,20 +31,106 @@ configs:
     loss.terms.0.multi_target_weights.correlation: 0.0
     loss.terms.0.multi_target_weights.radial: 1.0
     loss.terms.0.random_channel_shuffle: true
+    initialization.model_id: 20261118T165733Z-cfg540ddd0849db-8c5a46fc
+    model.family: gNCA
+    model.channels: 48
+    model.kernel_str:
+    - ID
+    - LAP
+    - DIFF
+    model.fire_rate: 0.5
+    model.padding: CIRCULAR
+    model.activation: relu
+    model.kernel_scale: 1
+    model.parameter_noise_level: 0.01
+    model.firing_estimator: straight_through
+    data.dataset: micropatterns_260726
+    data.downsample: 16
+    data.micropattern.projection: sum
+    data.micropattern.cleaning.enabled: true
+    data.micropattern.cleaning.hot_pixel_thresholds:
+      cell_fate_s1/SOX17: 30.0
+      cell_fate_s1/SOX2: 30.0
+      cell_fate_s1/TBXT: 30.0
+      cell_fate_s1/LMBR: 0.0
+      cell_fate_s2/SOX17: 30.0
+      cell_fate_s2/FOXA2: 30.0
+      cell_fate_s2/TBXT: 30.0
+      cell_fate_s2/LMBR: 0.0
+      rna_expression/CER1: 30.0
+      rna_expression/LEFTY: 30.0
+      rna_expression/NODAL: 30.0
+      protein_response/LEF1: 30.0
+      protein_response/LMBR: 0.0
+      protein_response/SMAD23: 30.0
+    data.micropattern.cleaning.hot_pixel_window: 5
+    data.micropattern.cleaning.background_radii:
+      cell_fate_s1/SOX17: 10
+      cell_fate_s1/SOX2: 10
+      cell_fate_s1/TBXT: 10
+      cell_fate_s1/LMBR: 0
+      cell_fate_s2/SOX17: 10
+      cell_fate_s2/FOXA2: 10
+      cell_fate_s2/TBXT: 10
+      cell_fate_s2/LMBR: 0
+      rna_expression/CER1: 0
+      rna_expression/LEFTY: 0
+      rna_expression/NODAL: 0
+      protein_response/LEF1: 10
+      protein_response/LMBR: 0
+      protein_response/SMAD23: 0
+    data.micropattern.cleaning.background_shrink: 4
+    data.micropattern.cleaning.horizontal_stripe_widths:
+      cell_fate_s1/TBXT: 10
+      cell_fate_s2/TBXT: 10
+    data.micropattern.cleaning.vertical_stripe_widths: {}
+    data.micropattern.cleaning.stripe_block: 270
+    data.micropattern.cleaning.alignment_file: Experiments/micropatterns/conf/alignment/260726_alignment.yaml
+    data.micropattern.cleaning.mask_radius_scale: 1.0
+    data.micropattern.cleaning.normalisation: per_replicate
+    data.micropattern.cleaning.channel_percentiles: {}
+    data.micropattern.cleaning.percentiles_inside_mask: true
+    data.micropattern.cleaning.knockout_bounds: joint
+    data.micropattern.excluded_measurements:
+    - cell_fate_s2/SOX17
+    data.micropattern.experiment_groups:
+    - cell_fate_s1
+    - cell_fate_s2
+    - rna_expression
+    - protein_response
+    data.micropattern.data_channels: 13
+    data.micropattern.timesteps:
+    - 0
+    - 12
+    - 24
+    - 36
+    - 48
+    data.micropattern.histogram_percentiles:
+    - 0.0
+    - 99.5
+    data.micropattern.intensity_factors:
+      cell_fate_s1/SOX17:
+        '0': 0.3
+      cell_fate_s2/SOX17:
+        '0': 0.15
+        '12': 0.5
+      cell_fate_s2/FOXA2:
+        '0': 0.02
     data.micropattern.train_replicates:
     - 1
     - 2
     data.micropattern.validation_replicates:
     - 3
     - 4
-    initialization.model_id: 20261118T165733Z-cfg540ddd0849db-8c5a46fc
+    run.t: 128
+    run.repeat: 0
     experiment.name: tutorial_finetune_ko_v1
     logging.wandb.group: tutorial_finetune_ko_v1
     seed: 0
     logging.wandb.tag_keys:
+    - initialization.model_id
     - data.micropattern.train_replicates
     - data.micropattern.validation_replicates
-    - initialization.model_id
   config:
     schema_version: 10
     seed: 0
@@ -64,7 +143,7 @@ configs:
       scaling: convective
       gpu: H200
     data:
-      dataset: micropatterns
+      dataset: micropatterns_260726
       batches: 2
       downsample: 16
       micropattern:
@@ -75,7 +154,11 @@ configs:
         validation_replicates:
         - 3
         - 4
-        experiment_groups: null
+        experiment_groups:
+        - cell_fate_s1
+        - cell_fate_s2
+        - rna_expression
+        - protein_response
         excluded_measurements:
         - cell_fate_s2/SOX17
         timesteps:
@@ -84,7 +167,7 @@ configs:
         - 24
         - 36
         - 48
-        data_channels: 12
+        data_channels: 13
         pad_multiple: null
         noise_strength: 0.005
         projection: sum
@@ -97,11 +180,15 @@ configs:
         intensity_factors:
           cell_fate_s1/SOX17:
             0: 0.3
+            '0': 0.3
           cell_fate_s2/SOX17:
             0: 0.15
             12: 0.5
+            '0': 0.15
+            '12': 0.5
           cell_fate_s2/FOXA2:
             0: 0.02
+            '0': 0.02
         cleaning:
           enabled: true
           hot_pixel_window: 5
@@ -158,14 +245,18 @@ configs:
         - ko_0h
         - ko_24h
     model:
-      family: NCA
-      channels: 32
+      family: gNCA
+      channels: 48
       kernel_str:
       - ID
       - LAP
       - DIFF
       fire_rate: 0.5
       padding: CIRCULAR
+      activation: relu
+      kernel_scale: 1
+      parameter_noise_level: 0.01
+      firing_estimator: straight_through
     trainer:
       boundary_mode: soft
       grad_loss: false
@@ -222,6 +313,7 @@ configs:
       checkpoint_warmup_fraction: 0.032
       write_images: true
       write_videos: false
+      repeat: 0
     logging:
       backend: wandb
       singular_values:
@@ -233,9 +325,9 @@ configs:
         group: tutorial_finetune_ko_v1
         tags: null
         tag_keys:
+        - initialization.model_id
         - data.micropattern.train_replicates
         - data.micropattern.validation_replicates
-        - initialization.model_id
     model_store:
       enabled: true
       root: models
@@ -254,13 +346,6 @@ configs:
     - baseline
     - ko_0h
     - ko_24h
-    data.micropattern.projection: sum
-    data.micropattern.cleaning.horizontal_stripe_widths:
-      cell_fate_s1/TBXT: 10
-      cell_fate_s2/TBXT: 10
-    data.micropattern.cleaning.stripe_block: 270
-    data.downsample: 16
-    run.t: 128
     run.iterations: 2000
     run.write_videos: false
     optimiser.learn_rate: 0.0001
@@ -276,20 +361,106 @@ configs:
     loss.terms.0.multi_target_weights.correlation: 0.0
     loss.terms.0.multi_target_weights.radial: 1.0
     loss.terms.0.random_channel_shuffle: true
+    initialization.model_id: 20261118T165732Z-cfgac37ad4d6c6a-cc68877f
+    model.family: gNCA
+    model.channels: 48
+    model.kernel_str:
+    - ID
+    - LAP
+    - DIFF
+    model.fire_rate: 0.5
+    model.padding: CIRCULAR
+    model.activation: relu
+    model.kernel_scale: 1
+    model.parameter_noise_level: 0.01
+    model.firing_estimator: straight_through
+    data.dataset: micropatterns_260726
+    data.downsample: 16
+    data.micropattern.projection: sum
+    data.micropattern.cleaning.enabled: true
+    data.micropattern.cleaning.hot_pixel_thresholds:
+      cell_fate_s1/SOX17: 30.0
+      cell_fate_s1/SOX2: 30.0
+      cell_fate_s1/TBXT: 30.0
+      cell_fate_s1/LMBR: 0.0
+      cell_fate_s2/SOX17: 30.0
+      cell_fate_s2/FOXA2: 30.0
+      cell_fate_s2/TBXT: 30.0
+      cell_fate_s2/LMBR: 0.0
+      rna_expression/CER1: 30.0
+      rna_expression/LEFTY: 30.0
+      rna_expression/NODAL: 30.0
+      protein_response/LEF1: 30.0
+      protein_response/LMBR: 0.0
+      protein_response/SMAD23: 30.0
+    data.micropattern.cleaning.hot_pixel_window: 5
+    data.micropattern.cleaning.background_radii:
+      cell_fate_s1/SOX17: 10
+      cell_fate_s1/SOX2: 10
+      cell_fate_s1/TBXT: 10
+      cell_fate_s1/LMBR: 0
+      cell_fate_s2/SOX17: 10
+      cell_fate_s2/FOXA2: 10
+      cell_fate_s2/TBXT: 10
+      cell_fate_s2/LMBR: 0
+      rna_expression/CER1: 0
+      rna_expression/LEFTY: 0
+      rna_expression/NODAL: 0
+      protein_response/LEF1: 10
+      protein_response/LMBR: 0
+      protein_response/SMAD23: 0
+    data.micropattern.cleaning.background_shrink: 4
+    data.micropattern.cleaning.horizontal_stripe_widths:
+      cell_fate_s1/TBXT: 10
+      cell_fate_s2/TBXT: 10
+    data.micropattern.cleaning.vertical_stripe_widths: {}
+    data.micropattern.cleaning.stripe_block: 270
+    data.micropattern.cleaning.alignment_file: Experiments/micropatterns/conf/alignment/260726_alignment.yaml
+    data.micropattern.cleaning.mask_radius_scale: 1.0
+    data.micropattern.cleaning.normalisation: per_replicate
+    data.micropattern.cleaning.channel_percentiles: {}
+    data.micropattern.cleaning.percentiles_inside_mask: true
+    data.micropattern.cleaning.knockout_bounds: joint
+    data.micropattern.excluded_measurements:
+    - cell_fate_s2/SOX17
+    data.micropattern.experiment_groups:
+    - cell_fate_s1
+    - cell_fate_s2
+    - rna_expression
+    - protein_response
+    data.micropattern.data_channels: 13
+    data.micropattern.timesteps:
+    - 0
+    - 12
+    - 24
+    - 36
+    - 48
+    data.micropattern.histogram_percentiles:
+    - 0.0
+    - 99.5
+    data.micropattern.intensity_factors:
+      cell_fate_s1/SOX17:
+        '0': 0.3
+      cell_fate_s2/SOX17:
+        '0': 0.15
+        '12': 0.5
+      cell_fate_s2/FOXA2:
+        '0': 0.02
     data.micropattern.train_replicates:
     - 3
     - 4
     data.micropattern.validation_replicates:
     - 1
     - 2
-    initialization.model_id: 20261118T165732Z-cfgac37ad4d6c6a-cc68877f
+    run.t: 128
+    run.repeat: 0
     experiment.name: tutorial_finetune_ko_v1
     logging.wandb.group: tutorial_finetune_ko_v1
     seed: 1
     logging.wandb.tag_keys:
+    - initialization.model_id
     - data.micropattern.train_replicates
     - data.micropattern.validation_replicates
-    - initialization.model_id
   config:
     schema_version: 10
     seed: 1
@@ -302,7 +473,7 @@ configs:
       scaling: convective
       gpu: H200
     data:
-      dataset: micropatterns
+      dataset: micropatterns_260726
       batches: 2
       downsample: 16
       micropattern:
@@ -313,7 +484,11 @@ configs:
         validation_replicates:
         - 1
         - 2
-        experiment_groups: null
+        experiment_groups:
+        - cell_fate_s1
+        - cell_fate_s2
+        - rna_expression
+        - protein_response
         excluded_measurements:
         - cell_fate_s2/SOX17
         timesteps:
@@ -322,7 +497,7 @@ configs:
         - 24
         - 36
         - 48
-        data_channels: 12
+        data_channels: 13
         pad_multiple: null
         noise_strength: 0.005
         projection: sum
@@ -335,11 +510,15 @@ configs:
         intensity_factors:
           cell_fate_s1/SOX17:
             0: 0.3
+            '0': 0.3
           cell_fate_s2/SOX17:
             0: 0.15
             12: 0.5
+            '0': 0.15
+            '12': 0.5
           cell_fate_s2/FOXA2:
             0: 0.02
+            '0': 0.02
         cleaning:
           enabled: true
           hot_pixel_window: 5
@@ -396,14 +575,18 @@ configs:
         - ko_0h
         - ko_24h
     model:
-      family: NCA
-      channels: 32
+      family: gNCA
+      channels: 48
       kernel_str:
       - ID
       - LAP
       - DIFF
       fire_rate: 0.5
       padding: CIRCULAR
+      activation: relu
+      kernel_scale: 1
+      parameter_noise_level: 0.01
+      firing_estimator: straight_through
     trainer:
       boundary_mode: soft
       grad_loss: false
@@ -460,6 +643,7 @@ configs:
       checkpoint_warmup_fraction: 0.032
       write_images: true
       write_videos: false
+      repeat: 0
     logging:
       backend: wandb
       singular_values:
@@ -471,9 +655,9 @@ configs:
         group: tutorial_finetune_ko_v1
         tags: null
         tag_keys:
+        - initialization.model_id
         - data.micropattern.train_replicates
         - data.micropattern.validation_replicates
-        - initialization.model_id
     model_store:
       enabled: true
       root: models
